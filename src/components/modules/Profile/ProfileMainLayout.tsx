@@ -1,50 +1,50 @@
-"use client"
+"use client";
 
-import React, { useState, useEffect } from "react"
-import Link from "next/link"
-import Image from "next/image"
-import { usePathname, useRouter } from "next/navigation"
-import { LogOut, X, User } from "lucide-react"
-import { profileSettingItems } from "@/components/shared/Profile-sidebar"
-import { useUser } from "@/context/UserContext"
-import { motion, AnimatePresence } from "framer-motion"
-import { logOut } from "@/services/AuthService"
-import { toast } from "sonner"
-import Loader from "@/components/ui/Loader/Loader"
+import React, { useState, useEffect } from "react";
+import Link from "next/link";
+import Image from "next/image";
+import { usePathname, useRouter } from "next/navigation";
+import { LogOut, X, User } from "lucide-react";
+import { profileSettingItems } from "@/components/shared/Profile-sidebar";
+import { useUser } from "@/context/UserContext";
+import { motion, AnimatePresence } from "framer-motion";
+import { logOut } from "@/services/AuthService";
+import { toast } from "sonner";
+import Loader from "@/components/ui/Loader/Loader";
 
 interface ProfileMainLayoutProps {
   children: React.ReactNode;
 }
 
 const ProfileMainLayout = ({ children }: ProfileMainLayoutProps) => {
-  const pathname = usePathname()
-  const [isMobile, setIsMobile] = useState(false)
-  const [navOpen, setNavOpen] = useState(false)
-  const { user } = useUser()
+  const pathname = usePathname();
+  const [isMobile, setIsMobile] = useState(false);
+  const [navOpen, setNavOpen] = useState(false);
+  const { user } = useUser();
   const router = useRouter();
 
   useEffect(() => {
-    const checkMobile = () => setIsMobile(window.innerWidth < 768)
-    checkMobile()
-    window.addEventListener("resize", checkMobile)
-    return () => window.removeEventListener("resize", checkMobile)
-  }, [])
+    const checkMobile = () => setIsMobile(window.innerWidth < 768);
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
 
-if (!user) {
-  return (
-    <div className="flex items-center justify-center min-h-screen">
-      <Loader />
-    </div>
-  );
-}
+  if (!user) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <Loader />
+      </div>
+    );
+  }
 
   const handleLogout = async () => {
-      await logOut()
-    localStorage.removeItem("accessToken")
-    localStorage.removeItem("userProfile")
-    toast.success('Logged out successfully')
-    router.push('/login')
-  }
+    await logOut();
+    localStorage.removeItem("accessToken");
+    localStorage.removeItem("userProfile");
+    toast.success("Logged out successfully");
+    router.push("/login");
+  };
 
   return (
     <div className="flex flex-col md:flex-row w-full min-h-screen pt-0">
@@ -83,7 +83,7 @@ if (!user) {
           initial={{ x: -300 }}
           animate={{
             x: navOpen || !isMobile ? 0 : -300,
-            opacity: navOpen || !isMobile ? 1 : 0
+            opacity: navOpen || !isMobile ? 1 : 0,
           }}
           exit={{ x: -300, opacity: 0 }}
           transition={{ type: "spring", stiffness: 300, damping: 30 }}
@@ -115,7 +115,7 @@ if (!user) {
 
             <nav className="flex flex-col flex-1 gap-2 px-4 py-6">
               {profileSettingItems.map((item, index) => {
-                const isActive = pathname === item.href
+                const isActive = pathname === item.href;
                 return (
                   <motion.div
                     key={item.href}
@@ -135,7 +135,7 @@ if (!user) {
                       {item.title}
                     </Link>
                   </motion.div>
-                )
+                );
               })}
               <div className="px-4 mt-10 pb-10">
                 <motion.button
@@ -156,7 +156,7 @@ if (!user) {
       {/* Main content */}
       <main className="flex-1 mt-24 md:mt-0 p-4">{children}</main>
     </div>
-  )
-}
+  );
+};
 
-export default ProfileMainLayout
+export default ProfileMainLayout;

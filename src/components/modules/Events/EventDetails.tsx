@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import { Badge } from "@/components/ui/badge";
@@ -91,7 +90,7 @@ const EventDetails = ({
       }
       setLoading(true);
       const res = await createParticipant(id);
-      console.log(res);
+      // console.log(res);
       if (res.success) {
         toast.success("Successfully registered for the event");
         // router.push(`/events/${event.slug}`);
@@ -108,7 +107,7 @@ const EventDetails = ({
   };
 
   return (
-    <div className="bg-gradient-to-br from-[#E3F2FD] via-[#BBDEFB] to-[#29B6F6] md:pb-20">
+    <div className=" md:pb-20">
       <HeroSecton
         title1="Next Level Events Await You"
         title2="Discover Your Next Adventure"
@@ -257,7 +256,7 @@ const EventDetails = ({
                     {event.type === "PRIVATE" ? (
                       <NextButton name="Private Event" disabled />
                     ) : event.participants?.some(
-                        (participant: any) => participant.userId === user.id
+                        (participant: any) => participant?.userId === user?.id
                       ) ? (
                       <NextButton name="Already Registered" disabled />
                     ) : Number(event.availableSit) -

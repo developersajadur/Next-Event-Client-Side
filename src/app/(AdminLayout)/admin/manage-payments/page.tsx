@@ -23,7 +23,6 @@ const ManagePaymentsPage = () => {
   const [loading, setLoading] = useState(false);
   const limit = 10;
 
-  // Filters state
   const [filters, setFilters] = useState<Filters>({
     searchTerm: '',
     paymentMethod: '',
@@ -34,7 +33,6 @@ const ManagePaymentsPage = () => {
 
   const totalPages = Math.ceil(total / limit);
 
-  // Handler for search input (text input)
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFilters(prev => ({
       ...prev,
@@ -42,7 +40,6 @@ const ManagePaymentsPage = () => {
     }));
   };
 
-  // Handler for other filter inputs (selects, number inputs)
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
@@ -55,11 +52,7 @@ const ManagePaymentsPage = () => {
   const fetchPayments = useCallback(async () => {
     setLoading(true);
     try {
-      // Prepare query parameters aligned with backend filter names
-      const query: IQuery & Record<string, any> = {
-        page,
-        limit,
-      };
+      const query: IQuery & Record<string, any> = { page, limit };
 
       if (filters.searchTerm.trim()) query.searchTerm = filters.searchTerm.trim();
       if (filters.paymentMethod) query.paymentMethod = filters.paymentMethod;
@@ -84,8 +77,8 @@ const ManagePaymentsPage = () => {
   }, [fetchPayments]);
 
   return (
-    <div className="px-10 py-6 mb-20">
-      <div className="flex items-center justify-between mb-4">
+    <div className="px-6 py-6 mb-20">
+      <div className="flex items-center justify-between mb-6">
         <Title title="Manage All Payments" />
       </div>
 
@@ -98,7 +91,6 @@ const ManagePaymentsPage = () => {
           onChange={handleSearchChange}
           className="p-2 border border-gray-300 rounded w-[200px]"
         />
-
         <select
           name="paymentMethod"
           value={filters.paymentMethod}
@@ -109,7 +101,6 @@ const ManagePaymentsPage = () => {
           <option value="COD">COD</option>
           <option value="Online">Online</option>
         </select>
-
         <select
           name="paymentStatus"
           value={filters.paymentStatus}
@@ -121,52 +112,50 @@ const ManagePaymentsPage = () => {
           <option value="Paid">Paid</option>
           <option value="Failed">Failed</option>
         </select>
-
         <input
           type="number"
           name="minAmount"
           placeholder="Min Amount"
           value={filters.minAmount}
           onChange={handleInputChange}
-          className="p-2 border border-gray-300 rounded"
+          className="p-2 border border-gray-300 rounded w-[120px]"
           min={0}
         />
-
         <input
           type="number"
           name="maxAmount"
           placeholder="Max Amount"
           value={filters.maxAmount}
           onChange={handleInputChange}
-          className="p-2 border border-gray-300 rounded"
+          className="p-2 border border-gray-300 rounded w-[120px]"
           min={0}
         />
       </div>
 
-      {/* Payment Table or Loader or No Data */}
+      {/* Payment Table */}
       {loading ? (
-        <div className="flex items-center justify-center min-h-screen">
+        <div className="flex items-center justify-center min-h-[300px]">
           <Loader />
         </div>
       ) : payments.length > 0 ? (
-        <div className="w-full overflow-x-auto border-t border-white rounded-lg shadow-md border-1">
-          <table className="min-w-[900px] w-full text-left text-base">
-            <thead className="text-sm font-medium text-gray-500 uppercase border-b border-white">
+        <div className="w-full overflow-x-auto rounded-lg shadow-sm border border-gray-200">
+          <table className="min-w-[500px] w-full text-left text-sm table-fixed">
+            <thead className="bg-gray-100 text-gray-600 uppercase">
               <tr>
-                <th className="px-4 py-3 w-[220px] pl-10">User</th>
-                <th className="px-4 py-3 w-[220px] pl-10">User Email</th>
-                <th className="px-4 py-3 w-[200px] border-2">Event</th>
-                <th className="px-4 py-3 w-[150px] border-2">Amount</th>
-                <th className="px-4 py-3 w-[150px] border-2">Transaction Id</th>
-                <th className="px-4 py-3 w-[150px] border-2">Payment Method</th>
-                <th className="px-4 py-3 w-[150px] border-2">Payment Status</th>
-                <th className="px-4 py-3 w-[200px] border-2">Payment Date</th>
+                <th className="py-3 px-4 w-[220px]">User</th>
+                <th className="py-3 px-4 w-[220px]">User Email</th>
+                <th className="py-3 px-4 w-[200px]">Event</th>
+                <th className="py-3 px-4 w-[120px]">Amount</th>
+                <th className="py-3 px-4 w-[220px]">Transaction ID</th>
+                <th className="py-3 px-4 w-[150px]">Method</th>
+                <th className="py-3 px-4 w-[150px]">Status</th>
+                <th className="py-3 px-4 w-[180px]">Payment Date</th>
               </tr>
             </thead>
             <tbody>
               {payments.map((payment) => (
-                <tr key={payment.id} className="border-white">
-                  <td className="flex items-center h-full gap-3 px-4 border-2 py-9">
+                <tr key={payment.id} className="border-t border-gray-100 hover:bg-gray-50">
+                  <td className="flex items-center gap-3 px-4 py-4">
                     <div className="relative w-10 h-10">
                       <Image
                         src={payment.user?.image || '/placeholder.svg'}
@@ -175,17 +164,17 @@ const ManagePaymentsPage = () => {
                         className="object-cover rounded-full"
                       />
                     </div>
-                    <span className="font-medium text-gray-800">
+                    <span className="text-gray-800 font-medium">
                       {payment.user?.name || 'Unknown User'}
                     </span>
                   </td>
-                  <td className="h-full px-4 py-4 truncate border-2">{payment.user?.email}</td>
-                  <td className="h-full px-4 py-4 truncate border-2">{payment.event?.title}</td>
-                  <td className="h-full px-4 py-4 truncate border-2">{payment.amount}</td>
-                  <td className="h-full px-4 py-4 truncate border-2">{payment.transactionId}</td>
-                  <td className="h-full px-4 py-4 truncate border-2">{payment.method}</td>
-                  <td className="h-full px-4 py-4 truncate border-2">{payment.status}</td>
-                  <td className="h-full px-4 py-4 border-2">
+                  <td className="px-4 py-4 truncate">{payment.user?.email}</td>
+                  <td className="px-4 py-4 truncate">{payment.event?.title}</td>
+                  <td className="px-4 py-4 truncate">{payment.amount}</td>
+                  <td className="px-4 py-4 truncate">{payment.transactionId}</td>
+                  <td className="px-4 py-4 truncate">{payment.method}</td>
+                  <td className="px-4 py-4 truncate">{payment.status}</td>
+                  <td className="px-4 py-4">
                     {new Date(payment.createdAt).toLocaleDateString()}
                   </td>
                 </tr>
@@ -194,10 +183,8 @@ const ManagePaymentsPage = () => {
           </table>
         </div>
       ) : (
-        <div>
-          <h1 className="text-3xl font-semibold text-center text-gray-500">
-            No Payments Found
-          </h1>
+        <div className="py-12 text-center text-gray-500">
+          <h2 className="text-xl font-medium">No Payments Found</h2>
         </div>
       )}
 
@@ -207,8 +194,10 @@ const ManagePaymentsPage = () => {
           <button
             key={idx}
             onClick={() => setPage(idx + 1)}
-            className={`px-4 py-2 border rounded ${
-              page === idx + 1 ? 'bg-gray-800 text-white' : 'bg-white text-gray-800'
+            className={`px-4 py-2 border rounded-md transition-all duration-150 ${
+              page === idx + 1
+                ? 'bg-gray-800 text-white'
+                : 'bg-white text-gray-800 hover:bg-gray-100'
             }`}
           >
             {idx + 1}
