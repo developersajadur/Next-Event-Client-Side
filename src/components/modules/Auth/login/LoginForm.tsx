@@ -1,5 +1,5 @@
 "use client";
-import {signIn} from 'next-auth/react'
+import { signIn } from "next-auth/react";
 import { Button } from "@/components/ui/button";
 // import { Card } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -73,23 +73,23 @@ const LoginForm = () => {
   const onSubmit: SubmitHandler<FieldValues> = async (data) => {
     setIsLoading(true);
     setLoginError("");
-  
+
     try {
       const res = await loginUser(data);
 
       if (res?.success) {
         const token = res.data?.accessToken;
-  
+
         if (token) {
           localStorage.setItem("accessToken", token);
-  
+
           const profileData = await getProfileInfo();
           localStorage.setItem("userProfile", JSON.stringify(profileData.data));
-          updateProfile(profileData.data); 
+          updateProfile(profileData.data);
         }
-  
+
         toast.success(res.message || "Login successful!");
-  
+
         setTimeout(() => {
           router.push(redirect || "/");
         }, 500);
@@ -104,8 +104,6 @@ const LoginForm = () => {
       setIsLoading(false);
     }
   };
-  
-
 
   const handleSocialLogin = (provider: string) => {
     toast.info(`${provider} login coming soon!`);
@@ -148,13 +146,13 @@ const LoginForm = () => {
               className="max-w-md mx-auto"
             >
               <div className="mb-8 ">
-               {/* <Title title="Welcome Back !" /> */}
-               <h1 className="my-4 text-3xl font-bold tracking-wide text-transparent text-white lg:text-5xl drop-shadow-sm">
+                {/* <Title title="Welcome Back !" /> */}
+                <h1 className="my-4 text-3xl font-bold tracking-wide text-transparent text-white lg:text-5xl drop-shadow-sm">
                   Welcome Back !
                 </h1>
-               
+
                 <p className="text-white">
-                  Enter your credentials to access your account . 
+                  Enter your credentials to access your account .
                 </p>
               </div>
 
@@ -173,9 +171,11 @@ const LoginForm = () => {
                     variant="outline"
                     size="icon"
                     className="w-10 h-10 rounded-full"
-                    onClick={() => signIn("google",{
-                      callbackUrl:  '/'
-                    })}
+                    onClick={() =>
+                      signIn("google", {
+                        callbackUrl: "/",
+                      })
+                    }
                   >
                     <svg className="w-5 h-5" viewBox="0 0 24 24">
                       <path
@@ -188,9 +188,11 @@ const LoginForm = () => {
                     variant="outline"
                     size="icon"
                     className="w-10 h-10 rounded-full"
-                    onClick={() => signIn("github", {
-                      callbackUrl: '/'
-                    })}
+                    onClick={() =>
+                      signIn("github", {
+                        callbackUrl: "/",
+                      })
+                    }
                   >
                     <Github className="w-5 h-5" />
                   </Button>
@@ -228,7 +230,9 @@ const LoginForm = () => {
                     name="email"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel className="text-lg text-white">Email</FormLabel>
+                        <FormLabel className="text-lg text-white">
+                          Email
+                        </FormLabel>
                         <FormControl>
                           <div className="relative">
                             <AtSign className="absolute w-4 h-4 text-gray-400 left-3 top-4" />
@@ -252,7 +256,9 @@ const LoginForm = () => {
                     render={({ field }) => (
                       <FormItem>
                         <div className="flex items-center justify-between">
-                          <FormLabel className="text-lg text-white">Password</FormLabel>
+                          <FormLabel className="text-lg text-white">
+                            Password
+                          </FormLabel>
                           <Link
                             href="/forget-password"
                             className="text-xs text-white underline hover:text-black"
@@ -297,7 +303,7 @@ const LoginForm = () => {
                       <FormItem className="flex flex-row items-center space-x-2 space-y-0">
                         <FormControl>
                           <Checkbox
-                          className="focus-visible:bg-[#1E3A8A] data-[state=checked]:bg-[#1E3A8A] data-[state=checked]:border-none"
+                            className="focus-visible:bg-[#1E3A8A] data-[state=checked]:bg-[#1E3A8A] data-[state=checked]:border-none"
                             checked={field.value}
                             onCheckedChange={field.onChange}
                           />
@@ -337,6 +343,49 @@ const LoginForm = () => {
                       </motion.div>
                     )}
                   </Button>
+                  <div className="mb-6 space-y-2">
+                    <h3 className="text-base font-semibold text-white">
+                      Demo Logins
+                    </h3>
+                    <div className="flex flex-wrap gap-4">
+                      <Button
+                        type="button"
+                        variant="default"
+                        className="bg-gradient-to-r from-blue-600 to-blue-800 hover:from-blue-700 hover:to-blue-900 text-white font-semibold px-6 py-2 rounded-lg shadow"
+                        onClick={async () => {
+                          const demoData = {
+                            email: "admin2@gmail.com",
+                            password: "Admin@123",
+                            rememberMe: false,
+                          };
+                          form.setValue("email", demoData.email);
+                          form.setValue("password", demoData.password);
+                          form.setValue("rememberMe", demoData.rememberMe);
+                          await form.handleSubmit(onSubmit)();
+                        }}
+                      >
+                        Login as Admin
+                      </Button>
+                      <Button
+                        type="button"
+                        variant="default"
+                        className="bg-gradient-to-r from-green-600 to-green-800 hover:from-green-700 hover:to-green-900 text-white font-semibold px-6 py-2 rounded-lg shadow"
+                        onClick={async () => {
+                          const demoData = {
+                            email: "user@gmail.com",
+                            password: "User@123",
+                            rememberMe: false,
+                          };
+                          form.setValue("email", demoData.email);
+                          form.setValue("password", demoData.password);
+                          form.setValue("rememberMe", demoData.rememberMe);
+                          await form.handleSubmit(onSubmit)();
+                        }}
+                      >
+                        Login as User
+                      </Button>
+                    </div>
+                  </div>
                 </form>
               </Form>
 

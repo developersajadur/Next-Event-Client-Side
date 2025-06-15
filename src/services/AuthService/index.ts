@@ -76,12 +76,6 @@ export const getToken = async () => {
 
 // log out
 export const logOut = async () => {
-  await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/logout`, {
-    method: "POST",
-    credentials: "include",
-  });
-localStorage.removeItem("accessToken");
-localStorage.removeItem("userProfile");
   (await cookies()).delete("accessToken");
 };
 

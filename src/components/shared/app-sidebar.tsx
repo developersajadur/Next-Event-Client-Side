@@ -75,11 +75,11 @@ const {user,isLoading} =useUser()
   const isActive = (url: string) => {
     return pathname === url || pathname?.startsWith(url + "/")
   }
-  
+
  const handleLogout = async () => {
-      await logOut()
-    localStorage.removeItem("accessToken")
-    localStorage.removeItem("userProfile")
+    await logOut()
+    localStorage.removeItem("accessToken");
+    localStorage.removeItem("userProfile");
     toast.success('Logged out successfully')
     router.push('/login')
   }
@@ -180,18 +180,15 @@ const {user,isLoading} =useUser()
             )}
           </div>
         ))}
-       <SidebarContent  className="w-full pt-8 border-1">
+       {/* <SidebarContent  className="w-full pt-8 border-1">
          <NextButton name="Logout" onClick={handleLogout} />
       
-      </SidebarContent >
+      </SidebarContent > */}
       </SidebarContent>
      
 
       <SidebarFooter className="p-4 mt-auto border-t">
-        <div className="text-xs leading-tight text-center text-gray-600">
-          <p className="font-semibold text-sm text-[#1E3A8A]">NextEvent Admin v1.0</p>
-          <p className="mt-1">© 2025 All Rights Reserved</p>
-        </div>
+           <NextButton name="Logout" onClick={handleLogout} />
       </SidebarFooter>
     </Sidebar>
   )
